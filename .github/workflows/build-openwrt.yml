@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: ipq6000-6.1 build
+name: AX18-6.1 build
 
 on:
   repository_dispatch:
