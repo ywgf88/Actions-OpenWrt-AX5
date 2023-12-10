@@ -22,11 +22,11 @@ env:
   REPO_URL: https://github.com/breeze303/Redmi-AX5-6.1.git
 #  REPO_URL: https://github.com/sdf8057/ipq6000.git
   REPO_BRANCH: main
-  FEEDS_CONF: feeds.conf.default
+  FEEDS_CONF: 6.1.default
   CONFIG_FILE: AX18.config
   #DIY_P1_SH: ./scripts/zn-m2/diy-part1.sh
-  DIY_P2_SH: diy-part1.sh
-  DIY_P3_SH: diy-part2.sh
+  DIY_P1_SH: diy-part1.sh
+  DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
@@ -77,8 +77,17 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+    - name: Cache
+      uses: stupidloud/cachewrtbuild@main
+      with:
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
+        
+        
     - name: Load custom feeds
       run: |
+        set -x
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_P1_SH
         cd openwrt
